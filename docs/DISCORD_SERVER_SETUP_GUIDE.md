@@ -215,7 +215,7 @@ Edit `src/Nightstorm.Bot/appsettings.json`:
     "DefaultConnection": "Host=localhost;Port=5432;Database=NightstormDb;Username=postgres;Password=mySecurePass123"
   },
   "DiscordBot": {
-    "Token": "MTIzNDU2Nzg5MDEyMzQ1Njc4OQ.GaBcDe.FgHiJkLmNoPqRsTuVwXyZ1234567890",
+    "Token": "TokenGoesHere",
     "GuildId": 1234567890123456789,
     "Channels": {
       "WelcomeChannelId": 1234567890123456789,
