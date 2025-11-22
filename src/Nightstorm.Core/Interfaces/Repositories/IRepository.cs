@@ -4,6 +4,7 @@ namespace Nightstorm.Core.Interfaces.Repositories;
 
 /// <summary>
 /// Generic repository interface for common data operations.
+/// Includes optimistic concurrency control support.
 /// </summary>
 /// <typeparam name="T">Entity type.</typeparam>
 public interface IRepository<T> where T : class
@@ -54,10 +55,15 @@ public interface IRepository<T> where T : class
     Task AddRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Updates an entity.
+    /// Updates an entity asynchronously with automatic concurrency conflict retry.
+    /// Automatically handles DbUpdateConcurrencyException by retrying with fresh data.
     /// </summary>
     /// <param name="entity">The entity to update.</param>
-    void Update(T entity);
+    /// <param name="maxRetries">Maximum number of retry attempts (default: 3).</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>The updated entity.</returns>
+    /// <exception cref="Exceptions.ConcurrencyException">Thrown when max retries exceeded.</exception>
+    Task<T> UpdateAsync(T entity, int maxRetries = 3, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Updates multiple entities.

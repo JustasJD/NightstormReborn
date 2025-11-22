@@ -25,4 +25,8 @@
     <ProjectReference Include="..\..\src\Nightstorm.Core\Nightstorm.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="TestResults\" />
+  </ItemGroup>
+
 </Project>

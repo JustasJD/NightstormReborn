@@ -17,6 +17,26 @@ public class Monster : BaseEntity
     /// Gets or sets the monster type.
     /// </summary>
     public MonsterType Type { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the monster difficulty tier.
+    /// </summary>
+    public MonsterDifficulty Difficulty { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the template ID this monster was generated from.
+    /// </summary>
+    public string? TemplateId { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the zone where this monster spawned.
+    /// </summary>
+    public Guid? ZoneId { get; set; }
+    
+    /// <summary>
+    /// Navigation property to the zone.
+    /// </summary>
+    public Zone? Zone { get; set; }
 
     /// <summary>
     /// Gets or sets the monster level.
@@ -27,6 +47,11 @@ public class Monster : BaseEntity
     /// Gets or sets the maximum health points.
     /// </summary>
     public int MaxHealth { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the current health points.
+    /// </summary>
+    public int CurrentHealth { get; set; }
 
     /// <summary>
     /// Gets or sets the attack type used by this monster.
@@ -74,11 +99,6 @@ public class Monster : BaseEntity
     public int GoldDrop { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether this is a boss monster.
-    /// </summary>
-    public bool IsBoss { get; set; }
-
-    /// <summary>
     /// Gets or sets the drop rate multiplier for items (0.0 to 1.0).
     /// </summary>
     public double DropRate { get; set; }
@@ -86,9 +106,10 @@ public class Monster : BaseEntity
     public Monster()
     {
         Level = MonsterConstants.DefaultLevel;
-        IsBoss = false;
+        Difficulty = MonsterDifficulty.Normal;
         DropRate = MonsterConstants.DefaultDropRate;
         AttackType = AttackType.HeavyMelee;
         ArmorType = ArmorType.Heavy;
+        CurrentHealth = MaxHealth;
     }
 }

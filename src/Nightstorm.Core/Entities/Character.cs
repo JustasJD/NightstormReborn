@@ -10,7 +10,19 @@ namespace Nightstorm.Core.Entities;
 public class Character : BaseEntity
 {
     /// <summary>
-    /// Gets or sets the Discord user ID associated with this character.
+    /// Gets or sets the User ID that owns this character (platform-agnostic).
+    /// </summary>
+    public Guid UserId { get; set; }
+
+    /// <summary>
+    /// Navigation property to the user that owns this character.
+    /// </summary>
+    public User User { get; set; } = null!;
+
+    /// <summary>
+    /// Gets or sets the Discord user ID (for backward compatibility).
+    /// This is populated from User.DiscordId for Discord users.
+    /// New code should use UserId instead.
     /// </summary>
     public ulong DiscordUserId { get; set; }
 
@@ -141,7 +153,7 @@ public class Character : BaseEntity
 
     /// <summary>
     /// Recalculates all derived stats when base stats change (e.g., after leveling up or equipping items).
-    /// </summary>
+    /// /// </summary>
     /// <param name="statsService">The character stats calculation service.</param>
     public void RecalculateStats(ICharacterStatsService statsService)
     {

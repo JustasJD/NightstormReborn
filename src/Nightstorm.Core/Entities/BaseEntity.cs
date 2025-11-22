@@ -1,7 +1,10 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Nightstorm.Core.Entities;
 
 /// <summary>
 /// Base class for all entities in the domain.
+/// Includes optimistic concurrency control via RowVersion.
 /// </summary>
 public abstract class BaseEntity
 {
@@ -29,6 +32,14 @@ public abstract class BaseEntity
     /// Gets or sets the date and time when the entity was deleted.
     /// </summary>
     public DateTime? DeletedAt { get; set; }
+
+    /// <summary>
+    /// Row version for optimistic concurrency control.
+    /// Automatically updated by database on every modification.
+    /// Used to detect and prevent concurrent update conflicts.
+    /// </summary>
+    [Timestamp]
+    public byte[] RowVersion { get; set; } = Array.Empty<byte>();
 
     protected BaseEntity()
     {

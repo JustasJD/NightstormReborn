@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.Logging;
+using Nightstorm.Core.Entities;
 using Nightstorm.Core.Interfaces.Repositories;
 using Nightstorm.Data.Contexts;
 
@@ -10,19 +12,21 @@ namespace Nightstorm.Data.Repositories;
 public class UnitOfWork : IUnitOfWork
 {
     private readonly RpgContext _context;
+    private readonly ILogger<Repository<Character>> _logger;
     private IDbContextTransaction? _transaction;
     private ICharacterRepository? _characterRepository;
 
-    public UnitOfWork(RpgContext context)
+    public UnitOfWork(RpgContext context, ILogger<Repository<Character>> logger)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
     public ICharacterRepository Characters
     {
         get
         {
-            _characterRepository ??= new CharacterRepository(_context);
+            _characterRepository ??= new CharacterRepository(_context, _logger);
             return _characterRepository;
         }
     }

@@ -16,7 +16,7 @@ public class CharacterStatsService : ICharacterStatsService
     // HP/MP Multipliers by Armor Type
     private const int HeavyArmorConstitutionMultiplier = 20;
     private const int LightArmorConstitutionMultiplier = 15;
-    private const int ClothArmorConstitutionMultiplier = 10;
+    private const int ClothArmorConstitutionMultiplier = 13;  // Increased from 10 to 13 (FIX #1)
     
     private const int HeavyArmorSpiritMultiplier = 10;
     private const int LightArmorSpiritMultiplier = 15;
@@ -36,20 +36,31 @@ public class CharacterStatsService : ICharacterStatsService
     /// <inheritdoc/>
     public int CalculateMeleeAttackPower(int strength, int dexterity)
     {
-        return (strength * 4) + (dexterity * 2) + 10;
+        return (int)(strength * 3.3) + (dexterity * 2) + 10;  // Reduced from 3.5 to 3.3 (NERF Monk/Ranger)
     }
 
     /// <inheritdoc/>
     public int CalculateRangedAttackPower(int dexterity, int strength)
     {
-        return (dexterity * 4) + (strength * 2) + 10;
+        return (int)(dexterity * 3.3) + (strength * 2) + 10;  // Reduced from 3.5 to 3.3 (NERF Monk/Ranger)
     }
 
     /// <inheritdoc/>
     public int CalculateMagicPower(CharacterClass characterClass, int intelligence, int wisdom, int spirit)
     {
         var primaryCasterStat = GetPrimaryCasterStat(characterClass, intelligence, wisdom);
-        return (primaryCasterStat * 4) + (spirit * 2) + 10;
+        
+        // Final balanced buffs
+        int classBonus = characterClass switch
+        {
+            CharacterClass.Bard => 10,          // Balanced support buff
+            CharacterClass.Necromancer => 2,    // Minimal buff
+            CharacterClass.Alchemist => 8,      // Hybrid needs help
+            _ => 0
+        };
+        
+        // Formula: (Primary * 3.8) + (SPR * 2) + 10 + classBonus
+        return (int)(primaryCasterStat * 3.8) + (spirit * 2) + 10 + classBonus;
     }
 
     /// <inheritdoc/>

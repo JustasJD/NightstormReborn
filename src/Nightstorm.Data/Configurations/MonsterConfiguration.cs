@@ -15,33 +15,41 @@ public class MonsterConfiguration : IEntityTypeConfiguration<Monster>
 
         builder.HasKey(m => m.Id);
 
+        // Configure properties
         builder.Property(m => m.Name)
             .IsRequired()
             .HasMaxLength(100);
 
         builder.Property(m => m.Type)
             .IsRequired()
-            .HasConversion<int>();
+            .HasConversion<string>();
+
+        builder.Property(m => m.Difficulty)
+            .IsRequired()
+            .HasConversion<string>();
+        
+        builder.Property(m => m.TemplateId)
+            .HasMaxLength(100);
 
         builder.Property(m => m.Level)
-            .IsRequired()
-            .HasDefaultValue(1);
+            .IsRequired();
 
         builder.Property(m => m.MaxHealth)
+            .IsRequired();
+        
+        builder.Property(m => m.CurrentHealth)
             .IsRequired();
 
         builder.Property(m => m.AttackType)
             .IsRequired()
-            .HasConversion<int>()
-            .HasDefaultValue(1); // HeavyMelee
+            .HasConversion<string>();
 
         builder.Property(m => m.AttackPower)
             .IsRequired();
 
         builder.Property(m => m.ArmorType)
             .IsRequired()
-            .HasConversion<int>()
-            .HasDefaultValue(1); // Heavy
+            .HasConversion<string>();
 
         builder.Property(m => m.HeavyMeleeDefense)
             .IsRequired();
@@ -56,33 +64,26 @@ public class MonsterConfiguration : IEntityTypeConfiguration<Monster>
             .IsRequired();
 
         builder.Property(m => m.ExperienceReward)
-            .IsRequired()
-            .HasDefaultValue(0);
+            .IsRequired();
 
         builder.Property(m => m.GoldDrop)
-            .IsRequired()
-            .HasDefaultValue(0);
-
-        builder.Property(m => m.IsBoss)
-            .IsRequired()
-            .HasDefaultValue(false);
+            .IsRequired();
 
         builder.Property(m => m.DropRate)
             .IsRequired()
-            .HasDefaultValue(0.1)
-            .HasPrecision(3, 2);
+            .HasPrecision(5, 2);
 
-        // Indexes
-        builder.HasIndex(m => m.Name);
+        // Configure relationships
+        builder.HasOne(m => m.Zone)
+            .WithMany()
+            .HasForeignKey(m => m.ZoneId)
+            .OnDelete(DeleteBehavior.SetNull);
 
+        // Configure indexes
         builder.HasIndex(m => m.Type);
-
+        builder.HasIndex(m => m.Difficulty);
         builder.HasIndex(m => m.Level);
-
-        builder.HasIndex(m => m.IsBoss);
-
-        builder.HasIndex(m => m.AttackType);
-
-        builder.HasIndex(m => m.ArmorType);
+        builder.HasIndex(m => m.TemplateId);
+        builder.HasIndex(m => m.ZoneId);
     }
 }
